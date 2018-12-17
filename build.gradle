@@ -19,6 +19,11 @@ allprojects {
     repositories {
         google()
         jcenter()
+
+        // location of Abbyy library module location
+        flatDir{
+            dirs'D:\\My_Files\\MEGAsync\\NCI\\YEAR_FOUR\\Project\\ShopKeep\\app\\libs'
+        }
     }
 }
 
