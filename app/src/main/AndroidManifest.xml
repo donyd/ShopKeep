@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.donyd.jsunscripted.www.shopkeep">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
@@ -19,5 +19,12 @@
             </intent-filter>
         </activity>
     </application>
+
+    // Abbyy requires checks ever 90 days to prevent license from expiring
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>
