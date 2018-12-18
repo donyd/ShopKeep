@@ -27,5 +27,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     // adding abbyy lib module
-    implementation(name:'abbyy-rtr-sdk-1.0', ext:'aar')
+    implementation(name: 'abbyy-rtr-sdk-1.0', ext: 'aar')
 }
