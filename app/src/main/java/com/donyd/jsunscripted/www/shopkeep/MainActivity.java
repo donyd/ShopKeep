@@ -17,13 +17,6 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnPriceGrabber = (Button) findViewById(R.id.btnPriceGrabber);
 
-        btnPriceGrabber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplication(), PriceGrabber.class);
-                startActivity(intent);
-            }
-        });
 
 
     }
