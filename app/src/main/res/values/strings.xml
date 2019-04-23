@@ -4,4 +4,5 @@
     <string name="button_shopping_list">Shopping List</string>
     <string name="button_reports">Reports</string>
     <string name="button_market">Market</string>
+    <string name="title_activity_price_grabber">PriceGrabber</string>
 </resources>

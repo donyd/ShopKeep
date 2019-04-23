@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.donyd.jsunscripted.www.shopkeep">
-    // Abbyy requires checks ever 90 days to prevent license from expiring
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
@@ -19,8 +18,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PriceGrabber"
+            android:label="@string/title_activity_price_grabber"></activity>
     </application>
 
 </manifest>
