@@ -5,4 +5,6 @@
     <string name="button_reports">Reports</string>
     <string name="button_market">Market</string>
     <string name="title_activity_price_grabber">PriceGrabber</string>
+    <string name="action_favorite">Cart</string>
+    <string name="action_settings">settings</string>
 </resources>
