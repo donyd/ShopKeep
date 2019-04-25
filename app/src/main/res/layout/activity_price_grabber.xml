@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".PriceGrabber">
 
+    <!-- code adapted from https://developer.android.com/training/appbar/setting-up.html#add-toolbar -->
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"

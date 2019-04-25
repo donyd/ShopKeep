@@ -19,12 +19,14 @@ public class PriceGrabber extends AppCompatActivity {
         setContentView(R.layout.activity_price_grabber);
 
         // Replace stock ActionBar
+        // Code adapted from https://developer.android.com/training/appbar/setting-up.html#add-toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
 
     }
 
+    // Code adapted from https://medium.com/@101/android-toolbar-for-appcompatactivity-671b1d10f354
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

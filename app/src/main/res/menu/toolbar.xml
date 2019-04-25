@@ -1,7 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- "Mark Favorite", should appear as action button if possible -->
+    <!-- "Mark Favorite", should appear as action button if possible
+         code adapted from https://developer.android.com/training/appbar/actions.html#add-actions -->
     <item
         android:id="@+id/action_favorite"
         android:icon="@drawable/baseline_shopping_cart_24"
