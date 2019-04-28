@@ -25,6 +25,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.donyd.jsunscripted.www.shopkeep.ui.camera.CameraSource;
@@ -62,11 +63,17 @@ public class PriceGrabber extends AppCompatActivity {
     private GestureDetector gestureDetector;
     // Eof Mobile vision OCR variables
 
+    // Global references to own UI elements
+    EditText ETPrice, ETName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_price_grabber);
 
+        // UI References
+        ETPrice = (EditText) findViewById(R.id.etPrice);
+        ETName = (EditText) findViewById(R.id.etName);
         // Replace stock ActionBar
         // Code adapted from https://developer.android.com/training/appbar/setting-up.html#add-toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -329,13 +336,25 @@ public class PriceGrabber extends AppCompatActivity {
      * @return true if the tap was on a TextBlock
      */
     private boolean onTap(float rawX, float rawY) {
-        // TODO: Speak the text when the user taps on screen.
+        // Grab detected text from preview area to be added to shopping list
         OcrGraphic graphic = graphicOverlay.getGraphicAtLocation(rawX, rawY);
         TextBlock text = null;
+        String textVal = null;
 
         if ( graphic != null ) {
             text = graphic.getTextBlock();
-            if ( text != null && text.getValue() != null ) {
+            textVal = text.getValue();
+
+            if ( text != null && textVal != null ) {
+                // Add captured value to edit text field
+
+                if(IntValCheck(textVal)){
+                    ETPrice.setText(textVal);
+                } else {
+                    ETName.setText(textVal);
+                }
+
+                // Debug logs
                 Log.d(TAG, "text dat is being spoken!" + text.getValue());
             }
             else {
@@ -345,6 +364,15 @@ public class PriceGrabber extends AppCompatActivity {
             Log.d(TAG, "no text detected");
         }
         return text != null;
+    }
+
+    // Personal method to check if start value of
+    // recovered strings are mumeric or alphabetic
+    // solution adapted from https://stackoverflow.com/questions/1223052/how-do-i-find-out-if-first-character-of-a-string-is-a-number
+    // returns true if first character of OCR selection is numerical therefore high probability of being the price
+    private boolean IntValCheck(String input){
+        char firstChar = input.charAt(0);
+        return Character.isDigit(firstChar);
     }
 
     private class CaptureGestureListener extends GestureDetector.SimpleOnGestureListener {
