@@ -179,15 +179,15 @@ public class PriceGrabber extends AppCompatActivity {
      */
     @SuppressLint("InlinedApi")
     private void createCameraSource(boolean autoFocus, boolean useFlash) {
-        Context context = getApplicationContext();
 
-        // TODO: Create the TextRecognizer
+        // Create TextRecognizer using current Context
+        Context context = getApplicationContext();
         TextRecognizer textRecognizer = new TextRecognizer.Builder(context).build();
 
-        // TODO: Set the TextRecognizer's Processor.
+        // Set TextRecognizer's Processor.
         textRecognizer.setProcessor(new OcrDetectorProcessor(graphicOverlay));
 
-        // TODO: Check if the TextRecognizer is operational.
+        // TextRecognizer availability check
         if(!textRecognizer.isOperational()){
             Log.w(TAG, "Detector dependencies are not yet available.");
 
@@ -202,8 +202,8 @@ public class PriceGrabber extends AppCompatActivity {
             }
         }
 
-        // TODO: Create the cameraSource using the TextRecognizer.
-        cameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
+        // Create cameraSource with TextRecognizer.
+        cameraSource = new CameraSource.Builder(context, textRecognizer)
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setRequestedPreviewSize(1280, 1024)
                 .setRequestedFps(15.0f)
