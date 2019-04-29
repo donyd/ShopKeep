@@ -346,8 +346,8 @@ public class PriceGrabber extends AppCompatActivity {
             textVal = text.getValue();
 
             if ( text != null && textVal != null ) {
-                // Add captured value to edit text field
-
+                // Add captured value to the associated edittext field
+                // based on whether it starts with number or not
                 if(IntValCheck(textVal)){
                     ETPrice.setText(textVal);
                 } else {

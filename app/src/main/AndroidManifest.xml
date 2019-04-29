@@ -4,6 +4,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
+        android:name="android.hardware.screen.portrait" />
+
+    <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
     <uses-feature
@@ -19,16 +22,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainActivity">
+
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".PriceGrabber"
-            android:label="@string/title_activity_price_grabber"></activity>
+            android:label="@string/title_activity_price_grabber"
+            android:screenOrientation="portrait">
+        </activity>
+
     </application>
 
 </manifest>
