@@ -35,8 +35,10 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.donyd.jsunscripted.www.shopkeep.ui.camera.GraphicOverlay;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import java.lang.Math;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 public class PriceGrabber extends AppCompatActivity {
     // Mobile vision OCR variables
@@ -66,9 +68,16 @@ public class PriceGrabber extends AppCompatActivity {
     // Global references to own UI elements
     EditText ETPrice, ETName;
 
-    // OTHER Variables
+    // OTHER VARIABLES
     // OCR check variables
     int firstCharIsDigit = 0, secondCharIsDigit = 1, nonDigit = 2;
+
+    // Decimal Formatting to two places
+    DecimalFormat decimalFormat = new DecimalFormat("##.##");
+
+    // Shopping Details
+    int itemCount;
+    double runningTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +89,7 @@ public class PriceGrabber extends AppCompatActivity {
         ETName = (EditText) findViewById(R.id.etName);
         // Replace stock ActionBar
         // Code adapted from https://developer.android.com/training/appbar/setting-up.html#add-toolbar
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
         // Mobile vision OCR setup
@@ -105,9 +114,34 @@ public class PriceGrabber extends AppCompatActivity {
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        Snackbar.make(graphicOverlay, "Tap to Speak. Pinch/Stretch to zoom",
-                Snackbar.LENGTH_LONG)
-                .show();
+        Snackbar.make(graphicOverlay, "Tap to Capture Details", Snackbar.LENGTH_SHORT).show();
+
+        // Add reference to button for adding items
+        Button addItem = (Button) findViewById(R.id.btnAdd);
+
+        // Update toolbar information and package information for storage
+        addItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get captured price input and convert to double for calculations
+                // Increase itemCount for each item scanned and update runningTotal
+
+                double curVal = Double.parseDouble(ETPrice.getText().toString());
+
+                itemCount++;
+                runningTotal += curVal;
+
+                // Build string output for updating toolbar
+                // and update toolbar using double formatted to two decimal places
+                // code utilised for formatting from: https://www.mkyong.com/java/java-display-double-in-2-decimal-points/
+                String result = Integer.toString(itemCount) + " Items | \u20ac" + decimalFormat.format(runningTotal);
+                myToolbar.setTitle(result);
+
+                // Clear edittext values on adding to toolbar
+                ETName.getText().clear();
+                ETPrice.getText().clear();
+            }
+        });
 
 
     }

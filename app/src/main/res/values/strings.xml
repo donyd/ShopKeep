@@ -4,7 +4,7 @@
     <string name="button_shopping_list">Shopping List</string>
     <string name="button_reports">Reports</string>
     <string name="button_market">Market</string>
-    <string name="title_activity_price_grabber">PriceGrabber</string>
+    <string name="title_activity_price_grabber">0 Items | \u20ac 0.00</string>
     <string name="action_favorite">Cart</string>
     <string name="action_settings">settings</string>
     <string name="ok">OK</string>
@@ -19,4 +19,5 @@
     <string name="ocr_success">Text read successfully</string>
     <string name="ocr_failure">No text captured</string>
     <string name="ocr_error">"Error reading text: %1$s"</string>
+    <string name="btnAdd">Add</string>
 </resources>

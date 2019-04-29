@@ -20,8 +20,8 @@
     <!-- https://codelabs.developers.google.com/codelabs/mobile-vision-ocr/#1 -->
     <com.donyd.jsunscripted.www.shopkeep.ui.camera.CameraSourcePreview
         android:id="@+id/preview"
-        android:layout_width="250dp"
-        android:layout_height="140dp"
+        android:layout_width="260dp"
+        android:layout_height="160dp"
         android:layout_marginBottom="200dp"
         android:layout_marginEnd="100dp"
         android:layout_marginStart="100dp"
@@ -33,8 +33,8 @@
 
         <com.donyd.jsunscripted.www.shopkeep.ui.camera.GraphicOverlay
             android:id="@+id/graphicOverlay"
-            android:layout_width="250dp"
-            android:layout_height="140dp"
+            android:layout_width="260dp"
+            android:layout_height="160dp"
             tools:layout_editor_absoluteX="152dp"
             tools:layout_editor_absoluteY="244dp" />
 
@@ -44,26 +44,39 @@
     <EditText
         android:id="@+id/etName"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="100dp"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/etPrice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preview" />
 
     <EditText
         android:id="@+id/etPrice"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="1dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:inputType="text"
+        android:layout_marginEnd="80dp"
+        android:layout_marginStart="2dp"
+        android:inputType="numberDecimal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="65dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="145dp"
+        android:text="@string/btnAdd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/etPrice"
+        app:layout_constraintTop_toBottomOf="@+id/preview" />
 
 
 </android.support.constraint.ConstraintLayout>
