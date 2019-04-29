@@ -66,6 +66,10 @@ public class PriceGrabber extends AppCompatActivity {
     // Global references to own UI elements
     EditText ETPrice, ETName;
 
+    // OTHER Variables
+    // OCR check variables
+    int firstCharIsDigit = 0, secondCharIsDigit = 1, nonDigit = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -348,8 +352,10 @@ public class PriceGrabber extends AppCompatActivity {
             if ( text != null && textVal != null ) {
                 // Add captured value to the associated edittext field
                 // based on whether it starts with number or not
-                if(IntValCheck(textVal)){
+                if(IntValCheck(textVal) == 0){
                     ETPrice.setText(textVal);
+                } else if (IntValCheck(textVal) == 1){
+                    ETPrice.setText(textVal.substring(1));
                 } else {
                     ETName.setText(textVal);
                 }
@@ -370,9 +376,16 @@ public class PriceGrabber extends AppCompatActivity {
     // recovered strings are mumeric or alphabetic
     // solution adapted from https://stackoverflow.com/questions/1223052/how-do-i-find-out-if-first-character-of-a-string-is-a-number
     // returns true if first character of OCR selection is numerical therefore high probability of being the price
-    private boolean IntValCheck(String input){
+    private int IntValCheck(String input){
         char firstChar = input.charAt(0);
-        return Character.isDigit(firstChar);
+        char secondChar = input.charAt(1);
+
+        if(Character.isDigit(firstChar)) {
+            return firstCharIsDigit;
+        } else if (Character.isDigit(secondChar)){
+            return secondCharIsDigit;
+        }
+        return nonDigit;
     }
 
     private class CaptureGestureListener extends GestureDetector.SimpleOnGestureListener {
