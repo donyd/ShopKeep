@@ -162,8 +162,9 @@ public class PriceGrabber extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_favorite) {
-            Toast.makeText(PriceGrabber.this, "Action clicked", Toast.LENGTH_LONG).show();
+        if (id == R.id.action_cart) {
+            Intent cartIntent = new Intent(this, ItemList.class);
+            startActivity(cartIntent);
             return true;
         }
 
