@@ -67,6 +67,7 @@ public class PriceGrabber extends AppCompatActivity {
 
     // Global references to own UI elements
     EditText ETPrice, ETName;
+    Toolbar myToolbar;
 
     // OTHER VARIABLES
     // OCR check variables
@@ -77,7 +78,10 @@ public class PriceGrabber extends AppCompatActivity {
 
     // Shopping Details
     int itemCount;
-    double runningTotal;
+    float runningTotal;
+
+    // TODO [personal]: Data structure for storing itemsList (Hashmap or persistence?
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +93,7 @@ public class PriceGrabber extends AppCompatActivity {
         ETName = (EditText) findViewById(R.id.etName);
         // Replace stock ActionBar
         // Code adapted from https://developer.android.com/training/appbar/setting-up.html#add-toolbar
-        final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
         // Mobile vision OCR setup
@@ -125,8 +129,12 @@ public class PriceGrabber extends AppCompatActivity {
             public void onClick(View view) {
                 // Get captured price input and convert to double for calculations
                 // Increase itemCount for each item scanned and update runningTotal
-
-                double curVal = Double.parseDouble(ETPrice.getText().toString());
+                float curVal;
+                if(ETPrice.getText().length() != 0) {
+                    curVal = Float.parseFloat(ETPrice.getText().toString());
+                } else {
+                    curVal = 0.0f;
+                }
 
                 itemCount++;
                 runningTotal += curVal;
@@ -276,6 +284,7 @@ public class PriceGrabber extends AppCompatActivity {
         if (preview != null) {
             preview.stop();
         }
+
     }
 
     /**
@@ -295,11 +304,27 @@ public class PriceGrabber extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
 
-        // TODO [donal]: add retrieval system to extract details capture for Bundle outState
+        // TODO [personal]: add retrieval system to extract details capture for Bundle outState ?
+        // TODO [personal]: put data captured in outState
+        outState.putInt("ItemCountKey", itemCount);
+        outState.putFloat("RunningTotal", runningTotal);
+        //Log.i("Save", Integer.toString(itemCount));
 
-        // TODO [donal]: put data captured in outState
+    }
 
+    // Restore after activity onStart()
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
 
+        // Retrieve saved information from bundle
+        itemCount = savedInstanceState.getInt("ItemCountKey");
+        runningTotal = savedInstanceState.getFloat("RunningTotal");
+
+        // Set toolbar to values from restored state
+        String result = Integer.toString(itemCount) + " Items | \u20ac" + decimalFormat.format(runningTotal);
+        myToolbar.setTitle(result);
+        // Log.i("Save", "Restoring State");
     }
 
     /**
@@ -400,7 +425,7 @@ public class PriceGrabber extends AppCompatActivity {
                 // Personal code
                 // Add captured value to the associated edittext field
                 // based on whether it starts with number or not
-                // TODO: Create check to remove non digit characters
+                // TODO [personal]: Create check to remove non digit characters
                 if(IntValCheck(textVal) == firstCharIsDigit){
                     ETPrice.setText(textVal);
                 } else if (IntValCheck(textVal) == secondCharIsDigit){
