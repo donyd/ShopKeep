@@ -290,6 +290,18 @@ public class PriceGrabber extends AppCompatActivity {
         }
     }
 
+    // Store item details on activity interruption
+    @Override
+    protected void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+
+        // TODO [donal]: add retrieval system to extract details capture for Bundle outState
+
+        // TODO [donal]: put data captured in outState
+
+
+    }
+
     /**
      * Callback for the result from requesting permissions. This method
      * is invoked for every call on {@link #requestPermissions(String[], int)}.
@@ -385,11 +397,13 @@ public class PriceGrabber extends AppCompatActivity {
             textVal = text.getValue();
 
             if ( text != null && textVal != null ) {
+                // Personal code
                 // Add captured value to the associated edittext field
                 // based on whether it starts with number or not
-                if(IntValCheck(textVal) == 0){
+                // TODO: Create check to remove non digit characters
+                if(IntValCheck(textVal) == firstCharIsDigit){
                     ETPrice.setText(textVal);
-                } else if (IntValCheck(textVal) == 1){
+                } else if (IntValCheck(textVal) == secondCharIsDigit){
                     ETPrice.setText(textVal.substring(1));
                 } else {
                     ETName.setText(textVal);
