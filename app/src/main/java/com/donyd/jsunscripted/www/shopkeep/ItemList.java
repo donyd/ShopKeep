@@ -15,14 +15,9 @@ public class ItemList extends AppCompatActivity {
     // Global references to own UI elements
     EditText ETPrice, ETName;
     Toolbar myToolbar;
+    MenuItem cartIcon;
 
     // OTHER VARIABLES
-    // OCR check variables
-    int firstCharIsDigit = 0, secondCharIsDigit = 1, nonDigit = 2;
-
-    // Decimal Formatting to two places
-    DecimalFormat decimalFormat = new DecimalFormat("##.##");
-
     // Shopping Details
     int itemCount;
     float runningTotal;
@@ -33,15 +28,15 @@ public class ItemList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
 
+        // Retrieve intent extra from PriceGrabber
+        totalInfo = getIntent().getStringExtra("totalInfo");
+        Log.i("IntentExtra", totalInfo);
+
         // Reinstate toolbar items and values using intent extra
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        totalInfo = getIntent().getStringExtra("totalInfo");
-
-
-        Log.i("IntentExtra", totalInfo);
-
-
+        // hide cart icon
+        invalidateOptionsMenu();
 
     }
 
@@ -50,8 +45,12 @@ public class ItemList extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.toolbar, menu);
-        // set running total info from PriceGrabber
+        // Set running total info from PriceGrabber
         myToolbar.setTitle(totalInfo);
+
+        // Get reference to the cart icon
+        cartIcon = menu.findItem(R.id.action_cart);
+        cartIcon.setVisible(false);
         return true;
     }
 
