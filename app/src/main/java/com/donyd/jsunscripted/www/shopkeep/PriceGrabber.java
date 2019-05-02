@@ -171,7 +171,10 @@ public class PriceGrabber extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_cart) {
+            // [personal] create a stub to carry total info
+            // TODO: use hashmap to contain list of shopping items
             Intent cartIntent = new Intent(this, ItemList.class);
+            cartIntent.putExtra("totalInfo", myToolbar.getTitle());
             startActivity(cartIntent);
             return true;
         }
@@ -308,7 +311,7 @@ public class PriceGrabber extends AppCompatActivity {
         // TODO [personal]: put data captured in outState
         outState.putInt("ItemCountKey", itemCount);
         outState.putFloat("RunningTotal", runningTotal);
-        //Log.i("Save", Integer.toString(itemCount));
+        Log.i("Save", Integer.toString(itemCount));
 
     }
 
@@ -324,7 +327,7 @@ public class PriceGrabber extends AppCompatActivity {
         // Set toolbar to values from restored state
         String result = Integer.toString(itemCount) + " Items | \u20ac" + decimalFormat.format(runningTotal);
         myToolbar.setTitle(result);
-        // Log.i("Save", "Restoring State");
+        Log.i("Save", "Restoring State");
     }
 
     /**

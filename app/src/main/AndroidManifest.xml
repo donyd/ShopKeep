@@ -39,7 +39,9 @@
 
         </activity>
 
-        <activity android:name=".ItemList">
+        <activity
+            android:name=".ItemList"
+            android:label="@string/title_activity_price_grabber">
 
         </activity>
     </application>
