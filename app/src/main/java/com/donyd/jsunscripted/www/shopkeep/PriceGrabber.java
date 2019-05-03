@@ -269,6 +269,19 @@ public class PriceGrabber extends AppCompatActivity {
                 .build();
     }
 
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        Log.i("Lifecycle", "Activity Started");
+    }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        Log.i("Lifecycle", "Activity Restarted");
+    }
+
     /**
      * Restarts the camera.
      */
@@ -276,6 +289,8 @@ public class PriceGrabber extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         startCameraSource();
+
+        Log.i("Lifecycle", "Activity Resumed");
     }
 
     /**
@@ -287,7 +302,13 @@ public class PriceGrabber extends AppCompatActivity {
         if (preview != null) {
             preview.stop();
         }
+        Log.i("Lifecycle", "Activity Paused");
+    }
 
+    @Override
+    protected void onStop(){
+        super.onStop();
+        Log.i("Lifecycle", "Activity Stopped");
     }
 
     /**
@@ -300,6 +321,8 @@ public class PriceGrabber extends AppCompatActivity {
         if (preview != null) {
             preview.release();
         }
+
+        Log.i("Lifecycle", "Activity Destroyed");
     }
 
     // Store item details on activity interruption
