@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ItemList extends AppCompatActivity {
@@ -32,6 +33,8 @@ public class ItemList extends AppCompatActivity {
     int itemCount;
     float runningTotal;
     String totalInfo;
+    HashMap<String, Float> shoppingList = new HashMap<String, Float>();
+
 
     // Swipe adaptor setup
     private ItemDataAdapter mAdapter;
@@ -41,14 +44,19 @@ public class ItemList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
 
+        // Retrieve intent extras from PriceGrabber
+        // code adapted from https://stackoverflow.com/questions/11452859/android-hashmap-in-bundle
+        totalInfo = getIntent().getStringExtra("totalInfo");
+        //Log.i("IntentExtra", totalInfo);
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null) {
+            shoppingList = (HashMap) bundle.getSerializable("shoppingListHashMap");
+        }
+
         // Swipe Adapter to display list of items
         // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
-        setItemDataAdapter();
+        setItemDataAdapter(shoppingList);
         setupRecyclerView();
-
-        // Retrieve intent extra from PriceGrabber
-        totalInfo = getIntent().getStringExtra("totalInfo");
-        Log.i("IntentExtra", totalInfo);
 
         // Reinstate toolbar items and values using intent extra
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -78,27 +86,10 @@ public class ItemList extends AppCompatActivity {
 
     // Swipe Adapter
     // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
-    private void setItemDataAdapter(){
+    private void setItemDataAdapter(HashMap<String, Float> incomingHashMap){
         List<Item> items = new ArrayList<>();
 
-        try {
-            InputStreamReader is = new InputStreamReader(getAssets().open("items.csv"));
-
-            BufferedReader bfReader = new BufferedReader(is);
-            bfReader.readLine();
-            String line;
-            String[] st;
-
-            while((line = bfReader.readLine()) != null) {
-                st = line.split(",");
-                Item item = new Item();
-                item.setName(st[0]);
-                item.setPrice(Float.parseFloat(st[1]));
-                items.add(item);
-            }
-        } catch (IOException e){
-            Log.d(TAG, e.toString());
-        }
+        items = putInArrayList(incomingHashMap);
 
         mAdapter = new ItemDataAdapter(items);
     }
@@ -108,6 +99,21 @@ public class ItemList extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(mAdapter);
+    }
+
+    // Personal method to transfer HashMap contents
+    // to ArrayList with generics
+    private static ArrayList<Item> putInArrayList(HashMap<String, Float> input){
+        ArrayList<Item> items = new ArrayList<>();
+
+        for (String i : input.keySet()){
+            Item item = new Item();
+            item.setName(i);
+            item.setPrice(input.get(i));
+            items.add(item);
+        }
+
+        return items;
     }
 
 

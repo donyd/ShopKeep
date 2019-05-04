@@ -39,6 +39,7 @@ import java.lang.Math;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 
 public class PriceGrabber extends AppCompatActivity {
     // Mobile vision OCR variables
@@ -81,6 +82,7 @@ public class PriceGrabber extends AppCompatActivity {
     float runningTotal;
 
     // TODO [personal]: Data structure for storing itemsList (Hashmap or persistence?
+    HashMap <String, Float> shoppingList = new HashMap<String, Float>();
 
 
     @Override
@@ -145,9 +147,13 @@ public class PriceGrabber extends AppCompatActivity {
                 String result = Integer.toString(itemCount) + " Items | \u20ac" + decimalFormat.format(runningTotal);
                 myToolbar.setTitle(result);
 
+                // Add item to HashMap for transport
+                shoppingList.put(ETName.getText().toString(), curVal);
+
                 // Clear edittext values on adding to toolbar
                 ETName.getText().clear();
                 ETPrice.getText().clear();
+
             }
         });
 
@@ -172,9 +178,15 @@ public class PriceGrabber extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_cart) {
             // [personal] create a stub to carry total info
-            // TODO: use hashmap to contain list of shopping items
             Intent cartIntent = new Intent(this, ItemList.class);
             cartIntent.putExtra("totalInfo", myToolbar.getTitle());
+
+            // TODO: use hashmap to contain list of shopping items
+            // code adapted from https://stackoverflow.com/questions/11452859/android-hashmap-in-bundle
+            Bundle extras = new Bundle();
+            extras.putSerializable("shoppingListHashMap", shoppingList);
+            cartIntent.putExtras(extras);
+
             startActivity(cartIntent);
             return true;
         }
