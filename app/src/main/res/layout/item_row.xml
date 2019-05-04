@@ -26,8 +26,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Alpro Almond Drink 1L"/>
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
@@ -40,8 +39,7 @@
                 android:id="@+id/price"
                 android:textSize="12sp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="€ 2.49"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
