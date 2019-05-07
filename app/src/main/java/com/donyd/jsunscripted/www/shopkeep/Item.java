@@ -1,5 +1,6 @@
 package com.donyd.jsunscripted.www.shopkeep;
 
+// code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
 public class Item {
     private String name;
     private float price;

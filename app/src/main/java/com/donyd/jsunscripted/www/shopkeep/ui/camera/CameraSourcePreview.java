@@ -29,6 +29,7 @@ import com.google.android.gms.common.images.Size;
 
 import java.io.IOException;
 
+// Code adapted from https://codelabs.developers.google.com/codelabs/mobile-vision-ocr/
 public class CameraSourcePreview extends ViewGroup {
     private static final String TAG = "CameraSourcePreview";
 

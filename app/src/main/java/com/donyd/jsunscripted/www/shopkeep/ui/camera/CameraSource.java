@@ -70,6 +70,9 @@ import java.util.Map;
  * <li>android.permissions.CAMERA</li>
  * </ul>
  */
+
+// Code adapted from https://codelabs.developers.google.com/codelabs/mobile-vision-ocr/
+
 @SuppressWarnings("deprecation")
 public class CameraSource {
     @SuppressLint("InlinedApi")

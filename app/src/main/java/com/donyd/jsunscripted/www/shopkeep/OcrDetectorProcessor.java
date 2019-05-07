@@ -11,6 +11,7 @@ import com.google.android.gms.vision.text.TextBlock;
  * A very simple Processor which gets detected TextBlocks and adds them to the overlay
  * as OcrGraphics.
  * TODO: Make this implement Detector.Processor<TextBlock> and add text to the GraphicOverlay
+ * Code adapted from https://codelabs.developers.google.com/codelabs/mobile-vision-ocr/
  */
 public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
 

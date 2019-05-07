@@ -45,6 +45,8 @@ import java.util.Set;
  * from the preview's coordinate system to the view coordinate system.</li>
  * </ol>
  */
+
+// Code adapted from https://codelabs.developers.google.com/codelabs/mobile-vision-ocr/
 public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     private final Object lock = new Object();
     private int previewWidth;

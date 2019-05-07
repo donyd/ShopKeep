@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+// code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
 public class ItemList extends AppCompatActivity {
 
     private static final String TAG = "setItemDataAdapter";

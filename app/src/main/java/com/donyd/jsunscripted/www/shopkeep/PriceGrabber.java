@@ -43,7 +43,7 @@ import java.util.HashMap;
 
 public class PriceGrabber extends AppCompatActivity {
     // Mobile vision OCR variables
-    // https://codelabs.developers.google.com/codelabs/mobile-vision-ocr/
+    // Code adapted from https://codelabs.developers.google.com/codelabs/mobile-vision-ocr/
     private static final String TAG = "OcrCaptureActivity";
 
     // Intent request code to handle updating play services if needed.
