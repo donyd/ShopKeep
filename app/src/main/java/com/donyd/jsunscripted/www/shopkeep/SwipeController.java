@@ -67,8 +67,8 @@ public class SwipeController extends Callback {
 
     // eof onChildDraw
 
-    private void setTouchListener(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
-                                  final float dX, final float dY, int actionState, boolean isCurrentlyActive){
+    private void setTouchListener(final Canvas c, final RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder,
+                                  final float dX, final float dY, final int actionState, final boolean isCurrentlyActive){
 
         recyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
