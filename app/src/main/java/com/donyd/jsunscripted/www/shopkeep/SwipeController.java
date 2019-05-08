@@ -10,6 +10,8 @@ import android.support.v7.widget.helper.ItemTouchHelper.Callback;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.HashMap;
+
 import static android.support.v7.widget.helper.ItemTouchHelper.*;
 
 // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
@@ -30,9 +32,14 @@ public class SwipeController extends Callback {
     private static final float buttonWidth = 150;
 
     private RectF buttonInstance = null;
+    private SwipeControllerActions buttonsActions = null;
+    private HashMap<String, Float> hashList = null;
 
-
-
+    // main constructor
+    public SwipeController(SwipeControllerActions buttonsActions, HashMap<String, Float> hashList) {
+        this.buttonsActions = buttonsActions;
+        this.hashList = hashList;
+    }
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
@@ -140,6 +147,17 @@ public class SwipeController extends Callback {
                     });
                     setItemsClickable(recyclerView, true);
                     swipeBack = false;
+
+                    // item list button logic
+                    if (buttonsActions != null && buttonInstance != null && buttonInstance.contains(event.getX(), event.getY())) {
+                        if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
+                            buttonsActions.onLeftClicked(viewHolder.getAdapterPosition());
+                        }
+                        else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
+                            buttonsActions.onRightClicked(viewHolder.getAdapterPosition());
+                        }
+                    }
+
                     buttonShowedState = ButtonsState.GONE;
                 }
                 return false;

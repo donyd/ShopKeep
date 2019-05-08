@@ -36,7 +36,7 @@ public class ItemList extends AppCompatActivity {
     int itemCount;
     float runningTotal;
     String totalInfo;
-    HashMap<String, Float> shoppingList = new HashMap<String, Float>();
+    public HashMap<String, Float> shoppingList = new HashMap<String, Float>();
 
 
     // Swipe adaptor setup
@@ -60,7 +60,7 @@ public class ItemList extends AppCompatActivity {
         // Swipe Adapter to display list of items
         // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
         setItemDataAdapter(shoppingList);
-        setupRecyclerView();
+        setupRecyclerView(shoppingList);
 
         // Reinstate toolbar items and values using intent extra
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -98,15 +98,32 @@ public class ItemList extends AppCompatActivity {
         mAdapter = new ItemDataAdapter(items);
     }
 
-    private void setupRecyclerView() {
+    private void setupRecyclerView(final HashMap<String, Float> incomingHashMap) {
         // Get reference to recyclerView
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(mAdapter);
 
+        // get hashmap
+        final HashMap<String, Float> hashList = incomingHashMap;
+
         // Swipe functionality test
-        swipeController = new SwipeController();
+        // swipeController = new SwipeController();
+        swipeController = new SwipeController(new SwipeControllerActions() {
+            // Attempt to get hashList to be passed outside main class file
+//            @Override
+//            public HashMap<String, Float> getHash(HashMap<String, Float> hashList) {
+//                return hashMap;
+//            }
+
+            @Override
+            public void onRightClicked(int position, incomingHashMap) {
+                mAdapter.incomingHashMap.remove(position);
+                mAdapter.notifyItemRemoved(position);
+                mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
+            }
+        });
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeController);
         itemTouchHelper.attachToRecyclerView(recyclerView);
