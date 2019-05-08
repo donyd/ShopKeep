@@ -33,12 +33,10 @@ public class SwipeController extends Callback {
 
     private RectF buttonInstance = null;
     private SwipeControllerActions buttonsActions = null;
-    private HashMap<String, Float> hashList = null;
 
     // main constructor
-    public SwipeController(SwipeControllerActions buttonsActions, HashMap<String, Float> hashList) {
+    public SwipeController(SwipeControllerActions buttonsActions) {
         this.buttonsActions = buttonsActions;
-        this.hashList = hashList;
     }
 
     @Override

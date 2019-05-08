@@ -24,6 +24,7 @@ import java.util.List;
 // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
 public class ItemList extends AppCompatActivity {
 
+    private static HashMap<String, Float> shoppingList = new HashMap<String, Float>();
     private static final String TAG = "setItemDataAdapter";
 
     // Global references to own UI elements
@@ -36,7 +37,6 @@ public class ItemList extends AppCompatActivity {
     int itemCount;
     float runningTotal;
     String totalInfo;
-    public HashMap<String, Float> shoppingList = new HashMap<String, Float>();
 
 
     // Swipe adaptor setup
@@ -60,7 +60,7 @@ public class ItemList extends AppCompatActivity {
         // Swipe Adapter to display list of items
         // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
         setItemDataAdapter(shoppingList);
-        setupRecyclerView(shoppingList);
+        setupRecyclerView();
 
         // Reinstate toolbar items and values using intent extra
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -68,10 +68,9 @@ public class ItemList extends AppCompatActivity {
         // hide cart icon
         invalidateOptionsMenu();
 
-
-
-
     }
+
+
 
     // Code adapted from https://medium.com/@101/android-toolbar-for-appcompatactivity-671b1d10f354
     @Override
@@ -98,28 +97,19 @@ public class ItemList extends AppCompatActivity {
         mAdapter = new ItemDataAdapter(items);
     }
 
-    private void setupRecyclerView(final HashMap<String, Float> incomingHashMap) {
+    private void setupRecyclerView() {
         // Get reference to recyclerView
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(mAdapter);
 
-        // get hashmap
-        final HashMap<String, Float> hashList = incomingHashMap;
-
         // Swipe functionality test
         // swipeController = new SwipeController();
         swipeController = new SwipeController(new SwipeControllerActions() {
-            // Attempt to get hashList to be passed outside main class file
-//            @Override
-//            public HashMap<String, Float> getHash(HashMap<String, Float> hashList) {
-//                return hashMap;
-//            }
-
             @Override
-            public void onRightClicked(int position, incomingHashMap) {
-                mAdapter.incomingHashMap.remove(position);
+            public void onRightClicked(int position) {
+                mAdapter.items.remove(position);
                 mAdapter.notifyItemRemoved(position);
                 mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
             }
@@ -141,16 +131,16 @@ public class ItemList extends AppCompatActivity {
     // Personal method to transfer HashMap contents
     // to ArrayList with generics
     private static ArrayList<Item> putInArrayList(HashMap<String, Float> input){
-        ArrayList<Item> items = new ArrayList<>();
+        ArrayList<Item> itemsList = new ArrayList<>();
 
         for (String i : input.keySet()){
             Item item = new Item();
             item.setName(i);
             item.setPrice(input.get(i));
-            items.add(item);
+            itemsList.add(item);
         }
 
-        return items;
+        return itemsList;
     }
 
 

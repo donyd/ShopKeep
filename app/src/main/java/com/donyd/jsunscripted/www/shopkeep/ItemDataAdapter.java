@@ -11,7 +11,7 @@ import java.util.List;
 
 // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
 public class ItemDataAdapter extends RecyclerView.Adapter<ItemDataAdapter.ItemViewHolder> {
-    private List<Item> items;
+    public List<Item> items;
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         private TextView name, price;
