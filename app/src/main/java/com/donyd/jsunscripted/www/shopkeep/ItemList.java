@@ -1,6 +1,7 @@
 package com.donyd.jsunscripted.www.shopkeep;
 
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,6 +41,7 @@ public class ItemList extends AppCompatActivity {
 
     // Swipe adaptor setup
     private ItemDataAdapter mAdapter;
+    SwipeController swipeController = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,16 +99,26 @@ public class ItemList extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
+        // Get reference to recyclerView
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(mAdapter);
 
         // Swipe functionality test
-        SwipeController swipeController = new SwipeController();
+        swipeController = new SwipeController();
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeController);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        // add itemDecoration to prevent swipe state being lost on scroll
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                swipeController.onDraw(c);
+            }
+        });
+
     }
 
     // Personal method to transfer HashMap contents

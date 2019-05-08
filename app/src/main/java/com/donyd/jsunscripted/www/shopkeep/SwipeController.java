@@ -80,9 +80,12 @@ public class SwipeController extends Callback {
         }
         currentItemViewHolder = viewHolder;
 
-    }
+        // Test -> Add buttons when swiping either way
+        //drawButtons(c, viewHolder);
 
-    // eof onChildDraw
+    }// eof onChildDraw
+
+
 
     private void setTouchListener(final Canvas c, final RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder,
                                   final float dX, final float dY, final int actionState, final boolean isCurrentlyActive){
@@ -187,4 +190,10 @@ public class SwipeController extends Callback {
         c.drawText(text, button.centerX()-(textWidth/2), button.centerY()+(textSize/2), p);
     } // eof drawText
 
-} // eof ClassFile
+    public void onDraw(Canvas c){
+        if (currentItemViewHolder != null){
+            drawButtons(c, currentItemViewHolder);
+        }
+    }
+
+} // eof Class file
