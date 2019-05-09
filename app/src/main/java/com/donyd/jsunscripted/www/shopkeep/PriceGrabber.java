@@ -185,6 +185,9 @@ public class PriceGrabber extends AppCompatActivity {
             Intent cartIntent = new Intent(this, ItemList.class);
             cartIntent.putExtra("totalInfo", myToolbar.getTitle());
 
+            // Intent extra for runningTotal and count
+            cartIntent.putExtra("runningTotal", runningTotal);
+            cartIntent.putExtra("itemCount", itemCount);
 
             // Bundle ArrayList<Item> into extras
             // code adapted from https://stackoverflow.com/questions/11452859/android-hashmap-in-bundle

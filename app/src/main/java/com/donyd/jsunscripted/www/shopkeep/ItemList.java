@@ -37,7 +37,10 @@ public class ItemList extends AppCompatActivity {
     int itemCount;
     float runningTotal;
     String totalInfo;
+    String toolbarUpdate;
 
+    // Decimal Formatting to two places
+    DecimalFormat decimalFormat = new DecimalFormat("##.##");
 
     // Swipe adaptor setup
     private ItemDataAdapter mAdapter;
@@ -52,10 +55,16 @@ public class ItemList extends AppCompatActivity {
         // code adapted from https://stackoverflow.com/questions/11452859/android-hashmap-in-bundle
         totalInfo = getIntent().getStringExtra("totalInfo");
         //Log.i("IntentExtra", totalInfo);
+
+        itemCount = getIntent().getIntExtra("itemCount", 0);
+        runningTotal = getIntent().getFloatExtra("runningTotal", 0.0F);
+
         Bundle bundle = getIntent().getExtras();
         if(bundle != null) {
             shoppingList = (ArrayList<Item>) bundle.getSerializable("shoppingList");
         }
+
+
 
         // Swipe Adapter to display list of items
         // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
@@ -142,7 +151,10 @@ public class ItemList extends AppCompatActivity {
                 mAdapter.notifyItemRemoved(position);
                 mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
                 Log.i(TAG, Integer.toString(mAdapter.getItemCount()) + " " + mAdapter.getItemId(position));
-                myToolbar.setTitle(Integer.toString(mAdapter.getItemCount()));
+
+ 
+                String result = Integer.toString(--itemCount) + " Items | \u20ac" + decimalFormat.format(runningTotal);
+                myToolbar.setTitle(result);
             }
         });
 
