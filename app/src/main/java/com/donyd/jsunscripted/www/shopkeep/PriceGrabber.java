@@ -39,7 +39,9 @@ import java.lang.Math;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class PriceGrabber extends AppCompatActivity {
     // Mobile vision OCR variables
@@ -81,8 +83,9 @@ public class PriceGrabber extends AppCompatActivity {
     int itemCount;
     float runningTotal;
 
-    // TODO [personal]: Data structure for storing itemsList (Hashmap or persistence?
-    HashMap <String, Float> shoppingList = new HashMap<String, Float>();
+    // TODO [personal]: Data structure for storing itemsList HashMap or persistence?
+    // ArrayList of type Item to hold items
+    ArrayList<Item> itemList = new ArrayList<>();
 
 
     @Override
@@ -147,8 +150,9 @@ public class PriceGrabber extends AppCompatActivity {
                 String result = Integer.toString(itemCount) + " Items | \u20ac" + decimalFormat.format(runningTotal);
                 myToolbar.setTitle(result);
 
-                // Add item to HashMap for transport
-                shoppingList.put(ETName.getText().toString(), curVal);
+                // Create and Add item to arrayList for transport
+                Item currentItem = new Item(ETName.getText().toString(), curVal);
+                itemList.add(currentItem);
 
                 // Clear edittext values on adding to toolbar
                 ETName.getText().clear();
@@ -181,10 +185,12 @@ public class PriceGrabber extends AppCompatActivity {
             Intent cartIntent = new Intent(this, ItemList.class);
             cartIntent.putExtra("totalInfo", myToolbar.getTitle());
 
-            // TODO: use hashmap to contain list of shopping items
+
+            // Bundle ArrayList<Item> into extras
             // code adapted from https://stackoverflow.com/questions/11452859/android-hashmap-in-bundle
+            // & https://www.youtube.com/watch?v=JXjOxy2W_w0
             Bundle extras = new Bundle();
-            extras.putSerializable("shoppingListHashMap", shoppingList);
+            extras.putSerializable("shoppingList", itemList);
             cartIntent.putExtras(extras);
 
             startActivity(cartIntent);

@@ -1,7 +1,10 @@
 package com.donyd.jsunscripted.www.shopkeep;
 
+
+import java.io.Serializable;
+
 // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
-public class Item {
+public class Item implements Serializable{
     private String name;
     private float price;
 
@@ -22,6 +25,9 @@ public class Item {
         this.price = price;
     }
 
-
+    public Item(String name, float price){
+        this.name = name;
+        this.price = price;
+    }
 
 }

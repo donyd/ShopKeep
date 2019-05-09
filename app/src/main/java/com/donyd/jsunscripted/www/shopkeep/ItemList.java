@@ -24,7 +24,7 @@ import java.util.List;
 // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
 public class ItemList extends AppCompatActivity {
 
-    private static HashMap<String, Float> shoppingList = new HashMap<String, Float>();
+    public static ArrayList<Item> shoppingList = new ArrayList<Item>();
     private static final String TAG = "setItemDataAdapter";
 
     // Global references to own UI elements
@@ -54,7 +54,7 @@ public class ItemList extends AppCompatActivity {
         //Log.i("IntentExtra", totalInfo);
         Bundle bundle = getIntent().getExtras();
         if(bundle != null) {
-            shoppingList = (HashMap) bundle.getSerializable("shoppingListHashMap");
+            shoppingList = (ArrayList<Item>) bundle.getSerializable("shoppingList");
         }
 
         // Swipe Adapter to display list of items
@@ -89,12 +89,35 @@ public class ItemList extends AppCompatActivity {
 
     // Swipe Adapter
     // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
-    private void setItemDataAdapter(HashMap<String, Float> incomingHashMap){
+    private void setItemDataAdapter(ArrayList<Item> incoming){
         List<Item> items = new ArrayList<>();
 
-        items = putInArrayList(incomingHashMap);
+        // For Testing purposes
+//        try {
+//            items = putInArrayList(incomingHashMap);
+//            InputStreamReader is = new InputStreamReader(getAssets().open("items.csv"));
+//
+//            BufferedReader bfReader = new BufferedReader(is);
+//            bfReader.readLine();
+//            String line;
+//            String[] st;
+//
+//            while((line = bfReader.readLine()) != null) {
+//                st = line.split(",");
+//                Item item = new Item(st[0], Float.parseFloat(st[1]));
+//                //item.setName(st[0]);
+//                //item.setPrice(Float.parseFloat(st[1]));
+//                items.add(item);
+//            }
+//        } catch (IOException e){
+//            Log.d(TAG, e.toString());
+//        }
 
-        mAdapter = new ItemDataAdapter(items);
+
+        // End of test stub
+
+
+        mAdapter = new ItemDataAdapter(incoming);
     }
 
     private void setupRecyclerView() {
@@ -108,10 +131,18 @@ public class ItemList extends AppCompatActivity {
         // swipeController = new SwipeController();
         swipeController = new SwipeController(new SwipeControllerActions() {
             @Override
+            public void onLeftClicked(int position){
+                Log.i(TAG, Integer.toString(mAdapter.getItemCount()) + " " + mAdapter.getItemId(position));
+
+            }
+
+            @Override
             public void onRightClicked(int position) {
                 mAdapter.items.remove(position);
                 mAdapter.notifyItemRemoved(position);
                 mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
+                Log.i(TAG, Integer.toString(mAdapter.getItemCount()) + " " + mAdapter.getItemId(position));
+                myToolbar.setTitle(Integer.toString(mAdapter.getItemCount()));
             }
         });
 
@@ -127,22 +158,6 @@ public class ItemList extends AppCompatActivity {
         });
 
     }
-
-    // Personal method to transfer HashMap contents
-    // to ArrayList with generics
-    private static ArrayList<Item> putInArrayList(HashMap<String, Float> input){
-        ArrayList<Item> itemsList = new ArrayList<>();
-
-        for (String i : input.keySet()){
-            Item item = new Item();
-            item.setName(i);
-            item.setPrice(input.get(i));
-            itemsList.add(item);
-        }
-
-        return itemsList;
-    }
-
 
 
 }
