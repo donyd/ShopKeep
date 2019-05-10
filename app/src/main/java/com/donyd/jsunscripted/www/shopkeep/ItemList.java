@@ -56,19 +56,23 @@ public class ItemList extends AppCompatActivity {
         totalInfo = getIntent().getStringExtra("totalInfo");
         //Log.i("IntentExtra", totalInfo);
 
-        itemCount = getIntent().getIntExtra("itemCount", 0);
-        runningTotal = getIntent().getFloatExtra("runningTotal", 0.0F);
+//        itemCount = getIntent().getIntExtra("itemCount", 0);
+//        runningTotal = getIntent().getFloatExtra("runningTotal", 0.0F);
 
-        Bundle bundle = getIntent().getExtras();
-        if(bundle != null) {
-            shoppingList = (ArrayList<Item>) bundle.getSerializable("shoppingList");
-        }
+        itemCount = 20;
+        runningTotal = 34.17f;
+
+
+//        Bundle bundle = getIntent().getExtras();
+//        if(bundle != null) {
+//            shoppingList = (ArrayList<Item>) bundle.getSerializable("shoppingList");
+//        }
 
 
 
         // Swipe Adapter to display list of items
         // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
-        setItemDataAdapter(shoppingList);
+        setItemDataAdapter();
         setupRecyclerView();
 
         // Reinstate toolbar items and values using intent extra
@@ -98,33 +102,33 @@ public class ItemList extends AppCompatActivity {
 
     // Swipe Adapter
     // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
-    private void setItemDataAdapter(ArrayList<Item> incoming){
+    private void setItemDataAdapter(){
 
         // For Testing purposes
-//        List<Item> items = new ArrayList<>();
-//        try {
-//            // items = putInArrayList(incomingHashMap);
-//            InputStreamReader is = new InputStreamReader(getAssets().open("items.csv"));
-//
-//            BufferedReader bfReader = new BufferedReader(is);
-//            bfReader.readLine();
-//            String line;
-//            String[] st;
-//
-//            while((line = bfReader.readLine()) != null) {
-//                st = line.split(",");
-//                Item item = new Item(st[0], Float.parseFloat(st[1]));
-//                //item.setName(st[0]);
-//                //item.setPrice(Float.parseFloat(st[1]));
-//                items.add(item);
-//            }
-//        } catch (IOException e){
-//            Log.d(TAG, e.toString());
-//        }
+        ArrayList<Item> items = new ArrayList<>();
+        try {
+            // items = putInArrayList(incomingHashMap);
+            InputStreamReader is = new InputStreamReader(getAssets().open("items.csv"));
+
+            BufferedReader bfReader = new BufferedReader(is);
+            bfReader.readLine();
+            String line;
+            String[] st;
+
+            while((line = bfReader.readLine()) != null) {
+                st = line.split(",");
+                Item item = new Item(st[0], Float.parseFloat(st[1]));
+                //item.setName(st[0]);
+                //item.setPrice(Float.parseFloat(st[1]));
+                items.add(item);
+            }
+        } catch (IOException e){
+            Log.d(TAG, e.toString());
+        }
 
         // End of test stub
-
-        mAdapter = new ItemDataAdapter(incoming);
+        shoppingList = items;
+        mAdapter = new ItemDataAdapter(items);
     }
 
     private void setupRecyclerView() {
@@ -140,6 +144,12 @@ public class ItemList extends AppCompatActivity {
             @Override
             public void onLeftClicked(int position){
                 Log.i(TAG, Integer.toString(mAdapter.getItemCount()) + " " + mAdapter.getItemId(position));
+                float currentItemPrice = shoppingList.get(position).getFloatPrice();
+                Log.i("price", "Price:" + Float.toString(currentItemPrice) + " Position: " + Integer.toString(position) + " Total : " + Float.toString(runningTotal));
+
+                float newTotal = runningTotal - currentItemPrice;
+
+                String result = Integer.toString(--itemCount) + " Items | \u20ac" + decimalFormat.format(newTotal);
 
             }
 
@@ -155,7 +165,7 @@ public class ItemList extends AppCompatActivity {
                 // Get price of item position of clicked item
                 // and calculate new total
                 if (itemCount > 0 && position > 0){
-                    float currentItemPrice = shoppingList.get(position - 1).getFloatPrice();
+                    float currentItemPrice = shoppingList.get(position).getFloatPrice();
                     Log.i("price", "Price:" + Float.toString(currentItemPrice) + " Position: " + Integer.toString(position) + " Total : " + Float.toString(runningTotal));
 
                     float newTotal = runningTotal - currentItemPrice;
@@ -164,6 +174,7 @@ public class ItemList extends AppCompatActivity {
                 } else {
                     result =  "0 Items | \u20ac 0";
                 }
+
 
                 myToolbar.setTitle(result);
             }
