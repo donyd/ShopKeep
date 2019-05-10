@@ -21,6 +21,8 @@ public class Item implements Serializable{
         return Float.toString(price);
     }
 
+    public float getFloatPrice() { return price; }
+
     public void setPrice(float price){
         this.price = price;
     }

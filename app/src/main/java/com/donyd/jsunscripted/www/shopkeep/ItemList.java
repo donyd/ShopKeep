@@ -99,11 +99,11 @@ public class ItemList extends AppCompatActivity {
     // Swipe Adapter
     // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
     private void setItemDataAdapter(ArrayList<Item> incoming){
-        List<Item> items = new ArrayList<>();
 
         // For Testing purposes
+//        List<Item> items = new ArrayList<>();
 //        try {
-//            items = putInArrayList(incomingHashMap);
+//            // items = putInArrayList(incomingHashMap);
 //            InputStreamReader is = new InputStreamReader(getAssets().open("items.csv"));
 //
 //            BufferedReader bfReader = new BufferedReader(is);
@@ -122,9 +122,7 @@ public class ItemList extends AppCompatActivity {
 //            Log.d(TAG, e.toString());
 //        }
 
-
         // End of test stub
-
 
         mAdapter = new ItemDataAdapter(incoming);
     }
@@ -152,8 +150,21 @@ public class ItemList extends AppCompatActivity {
                 mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
                 Log.i(TAG, Integer.toString(mAdapter.getItemCount()) + " " + mAdapter.getItemId(position));
 
- 
-                String result = Integer.toString(--itemCount) + " Items | \u20ac" + decimalFormat.format(runningTotal);
+                String result;
+
+                // Get price of item position of clicked item
+                // and calculate new total
+                if (itemCount > 0 && position > 0){
+                    float currentItemPrice = shoppingList.get(position - 1).getFloatPrice();
+                    Log.i("price", "Price:" + Float.toString(currentItemPrice) + " Position: " + Integer.toString(position) + " Total : " + Float.toString(runningTotal));
+
+                    float newTotal = runningTotal - currentItemPrice;
+
+                    result = Integer.toString(--itemCount) + " Items | \u20ac" + decimalFormat.format(newTotal);
+                } else {
+                    result =  "0 Items | \u20ac 0";
+                }
+
                 myToolbar.setTitle(result);
             }
         });
