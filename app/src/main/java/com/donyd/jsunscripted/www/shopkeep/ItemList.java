@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import com.donyd.jsunscripted.www.shopkeep.sqlite.DatabaseHelper;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,6 +45,9 @@ public class ItemList extends AppCompatActivity {
     // Swipe adaptor setup
     private ItemDataAdapter mAdapter;
     SwipeController swipeController = null;
+
+    // Database helper
+    DatabaseHelper mDatabaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,6 +234,19 @@ public class ItemList extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    // Add shoppinglist items to database
+    // code adapted from https://www.youtube.com/watch?v=aQAIMY-HzL8
+    public void AddData(ArrayList<Item> itemList){
+        boolean insertData = mDatabaseHelper.addShoppingList(itemList);
+
+        if (insertData){
+            Log.i("DatabaseCHK", "Shopping added successfully");
+        } else {
+            Log.i("DatabaseCHK", "Shopping add unsuccessful");
+        }
     }
 
 
