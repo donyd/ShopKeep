@@ -21,23 +21,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.donyd.jsunscripted.www.shopkeep.MainActivity.itemCount;
+import static com.donyd.jsunscripted.www.shopkeep.MainActivity.runningTotal;
+import static com.donyd.jsunscripted.www.shopkeep.MainActivity.toolbarInfo;
+import static com.donyd.jsunscripted.www.shopkeep.MainActivity.shoppingList;
+
 // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
 public class ItemList extends AppCompatActivity {
 
-    public static ArrayList<Item> shoppingList = new ArrayList<Item>();
+//    public static ArrayList<Item> shoppingList = new ArrayList<Item>();
     private static final String TAG = "setItemDataAdapter";
 
     // Global references to own UI elements
     EditText ETPrice, ETName;
     Toolbar myToolbar;
     MenuItem cartIcon;
-
-    // OTHER VARIABLES
-    // Shopping Details
-    int itemCount;
-    float runningTotal;
-    String totalInfo;
-    String toolbarUpdate;
 
     // Decimal Formatting to two places
     DecimalFormat decimalFormat = new DecimalFormat("##.##");
@@ -50,25 +48,6 @@ public class ItemList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
-
-        // Retrieve intent extras from PriceGrabber
-        // code adapted from https://stackoverflow.com/questions/11452859/android-hashmap-in-bundle
-        totalInfo = getIntent().getStringExtra("totalInfo");
-        //Log.i("IntentExtra", totalInfo);
-
-        itemCount = getIntent().getIntExtra("itemCount", 0);
-        runningTotal = getIntent().getFloatExtra("runningTotal", 0.0F);
-
-//        itemCount = 20;
-//        runningTotal = 34.17f;
-
-
-        Bundle bundle = getIntent().getExtras();
-        if(bundle != null) {
-            shoppingList = (ArrayList<Item>) bundle.getSerializable("shoppingList");
-        }
-
-
 
         // Swipe Adapter to display list of items
         // code adapted from https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
@@ -83,6 +62,66 @@ public class ItemList extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart(){
+        super.onStart();
+        Log.i("Lifecycle", "ItemList Started");
+    }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        Log.i("Lifecycle", "ItemList Restarted");
+    }
+
+    /**
+     * Restarts the camera.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("Lifecycle", "ItemList Resumed");
+    }
+
+    /**
+     * Stops the camera.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i("Lifecycle", "ItemList Paused");
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        Log.i("Lifecycle", "ItemList Stopped");
+    }
+
+    /**
+     * Releases the resources associated with the camera source, the associated detectors, and the
+     * rest of the processing pipeline.
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("Lifecycle", "ItemList Destroyed");
+    }
+
+    // Store item details on activity interruption
+    @Override
+    protected void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+
+        // TODO [personal]: add retrieval system to extract details capture for Bundle outState ?
+        // TODO [personal]: put data captured in outState
+        outState.putInt("ItemCountKey", itemCount);
+        outState.putFloat("RunningTotal", runningTotal);
+        Log.i("Save", Integer.toString(itemCount));
+
+    }
+
+
 
 
     // Code adapted from https://medium.com/@101/android-toolbar-for-appcompatactivity-671b1d10f354
@@ -92,7 +131,7 @@ public class ItemList extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.toolbar, menu);
         // Set running total info from PriceGrabber
 
-        myToolbar.setTitle(totalInfo);
+        myToolbar.setTitle(toolbarInfo);
 
         // Get reference to the cart icon
         cartIcon = menu.findItem(R.id.action_cart);
@@ -149,15 +188,13 @@ public class ItemList extends AppCompatActivity {
                 float currentItemPrice = shoppingList.get(position).getFloatPrice();
                 Log.i("price", "Price:" + Float.toString(currentItemPrice) + " Position: " + Integer.toString(position) + " Total : " + Float.toString(runningTotal));
 
-                String result = Integer.toString(itemCount) + " Items | \u20ac" + decimalFormat.format(runningTotal);
-                myToolbar.setTitle(result);
+                toolbarInfo = Integer.toString(itemCount) + " Items | \u20ac" + decimalFormat.format(runningTotal);
+                myToolbar.setTitle(toolbarInfo);
 
             }
 
             @Override
             public void onRightClicked(int position) {
-                String result;
-
                 // Get price of item position of clicked item
                 // and calculate new total
                 if (itemCount > 0){
@@ -167,9 +204,9 @@ public class ItemList extends AppCompatActivity {
                     float thisRunningtotal = runningTotal;
                     runningTotal = thisRunningtotal - currentItemPrice;
 
-                    result = Integer.toString(--itemCount) + " Items | \u20ac" + decimalFormat.format(runningTotal);
+                    toolbarInfo = Integer.toString(--itemCount) + " Items | \u20ac" + decimalFormat.format(runningTotal);
                 } else {
-                    result =  "0 Items | \u20ac 0";
+                    toolbarInfo =  "0 Items | \u20ac 0";
                 }
 
                 mAdapter.items.remove(position);
@@ -177,7 +214,7 @@ public class ItemList extends AppCompatActivity {
                 mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
                 Log.i(TAG, Integer.toString(mAdapter.getItemCount()) + " " + mAdapter.getItemId(position));
 
-                myToolbar.setTitle(result);
+                myToolbar.setTitle(toolbarInfo);
             }
         });
 

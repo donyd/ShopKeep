@@ -35,13 +35,15 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.donyd.jsunscripted.www.shopkeep.ui.camera.GraphicOverlay;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
-import java.lang.Math;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
+import static com.donyd.jsunscripted.www.shopkeep.MainActivity.itemCount;
+import static com.donyd.jsunscripted.www.shopkeep.MainActivity.runningTotal;
+import static com.donyd.jsunscripted.www.shopkeep.MainActivity.toolbarInfo;
+import static com.donyd.jsunscripted.www.shopkeep.MainActivity.shoppingList;
 
 public class PriceGrabber extends AppCompatActivity {
     // Mobile vision OCR variables
@@ -76,17 +78,10 @@ public class PriceGrabber extends AppCompatActivity {
     // OCR check variables
     int firstCharIsDigit = 0, secondCharIsDigit = 1, nonDigit = 2;
 
+
+
     // Decimal Formatting to two places
     DecimalFormat decimalFormat = new DecimalFormat("##.##");
-
-    // Shopping Details
-    int itemCount;
-    float runningTotal;
-
-    // TODO [personal]: Data structure for storing itemsList HashMap or persistence?
-    // ArrayList of type Item to hold items
-    ArrayList<Item> itemList = new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,12 +142,12 @@ public class PriceGrabber extends AppCompatActivity {
                 // Build string output for updating toolbar
                 // and update toolbar using double formatted to two decimal places
                 // code utilised for formatting from: https://www.mkyong.com/java/java-display-double-in-2-decimal-points/
-                String result = Integer.toString(itemCount) + " Items | \u20ac" + decimalFormat.format(runningTotal);
-                myToolbar.setTitle(result);
+                toolbarInfo = Integer.toString(itemCount) + " Items | \u20ac" + decimalFormat.format(runningTotal);
+                myToolbar.setTitle(toolbarInfo);
 
                 // Create and Add item to arrayList for transport
                 Item currentItem = new Item(ETName.getText().toString(), curVal);
-                itemList.add(currentItem);
+                shoppingList.add(currentItem);
 
                 // Clear edittext values on adding to toolbar
                 ETName.getText().clear();
@@ -183,18 +178,6 @@ public class PriceGrabber extends AppCompatActivity {
         if (id == R.id.action_cart) {
             // [personal] create a stub to carry total info
             Intent cartIntent = new Intent(this, ItemList.class);
-            cartIntent.putExtra("totalInfo", myToolbar.getTitle());
-
-            // Intent extra for runningTotal and count
-            cartIntent.putExtra("runningTotal", runningTotal);
-            cartIntent.putExtra("itemCount", itemCount);
-
-            // Bundle ArrayList<Item> into extras
-            // code adapted from https://stackoverflow.com/questions/11452859/android-hashmap-in-bundle
-            // & https://www.youtube.com/watch?v=JXjOxy2W_w0
-            Bundle extras = new Bundle();
-            extras.putSerializable("shoppingList", itemList);
-            cartIntent.putExtras(extras);
 
             startActivity(cartIntent);
             return true;
@@ -294,13 +277,13 @@ public class PriceGrabber extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
-        Log.i("Lifecycle", "Activity Started");
+        Log.i("Lifecycle", "PriceGrabber Started");
     }
 
     @Override
     protected void onRestart(){
         super.onRestart();
-        Log.i("Lifecycle", "Activity Restarted");
+        Log.i("Lifecycle", "PriceGrabber Restarted");
     }
 
     /**
@@ -311,7 +294,10 @@ public class PriceGrabber extends AppCompatActivity {
         super.onResume();
         startCameraSource();
 
-        Log.i("Lifecycle", "Activity Resumed");
+        // Set toolbar title on resume to account for back button
+        // and activity being destroyed
+        myToolbar.setTitle(toolbarInfo);
+        Log.i("Lifecycle", "PriceGrabber Resumed");
     }
 
     /**
@@ -323,13 +309,13 @@ public class PriceGrabber extends AppCompatActivity {
         if (preview != null) {
             preview.stop();
         }
-        Log.i("Lifecycle", "Activity Paused");
+        Log.i("Lifecycle", "PriceGrabber Paused");
     }
 
     @Override
     protected void onStop(){
         super.onStop();
-        Log.i("Lifecycle", "Activity Stopped");
+        Log.i("Lifecycle", "PriceGrabber Stopped");
     }
 
     /**
@@ -342,8 +328,7 @@ public class PriceGrabber extends AppCompatActivity {
         if (preview != null) {
             preview.release();
         }
-
-        Log.i("Lifecycle", "Activity Destroyed");
+        Log.i("Lifecycle", "PriceGrabber Destroyed");
     }
 
     // Store item details on activity interruption
@@ -369,8 +354,8 @@ public class PriceGrabber extends AppCompatActivity {
         runningTotal = savedInstanceState.getFloat("RunningTotal");
 
         // Set toolbar to values from restored state
-        String result = Integer.toString(itemCount) + " Items | \u20ac" + decimalFormat.format(runningTotal);
-        myToolbar.setTitle(result);
+        toolbarInfo = Integer.toString(itemCount) + " Items | \u20ac" + decimalFormat.format(runningTotal);
+        myToolbar.setTitle(toolbarInfo);
         Log.i("Save", "Restoring State");
     }
 
@@ -472,7 +457,7 @@ public class PriceGrabber extends AppCompatActivity {
                 // Personal code
                 // Add captured value to the associated edittext field
                 // based on whether it starts with number or not
-                // TODO [personal]: Create check to remove non digit characters
+                // TODO:  Create check to remove non digit characters
                 if(IntValCheck(textVal) == firstCharIsDigit){
                     ETPrice.setText(textVal);
                 } else if (IntValCheck(textVal) == secondCharIsDigit){
@@ -502,8 +487,10 @@ public class PriceGrabber extends AppCompatActivity {
         char secondChar = input.charAt(1);
 
         if(Character.isDigit(firstChar)) {
+            // TODO: remove trailing characters if not digit
             return firstCharIsDigit;
         } else if (Character.isDigit(secondChar)){
+            // TODO: remove trailing characters if not digit
             return secondCharIsDigit;
         }
         return nonDigit;

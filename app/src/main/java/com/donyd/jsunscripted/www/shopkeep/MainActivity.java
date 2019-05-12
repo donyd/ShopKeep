@@ -6,9 +6,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
 import java.util.prefs.PreferenceChangeEvent;
 
 public class MainActivity extends AppCompatActivity {
+
+    // Static variables for maintaining cross activity values
+    public static ArrayList<Item> shoppingList = new ArrayList<>();
+    // Shopping Details
+    public static int itemCount;
+    public static float runningTotal;
+    public static String toolbarInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
