@@ -295,8 +295,10 @@ public class PriceGrabber extends AppCompatActivity {
         startCameraSource();
 
         // Set toolbar title on resume to account for back button
-        // and activity being destroyed
-        myToolbar.setTitle(toolbarInfo);
+        // and activity being destroyed if not null
+        if(toolbarInfo != null) {
+            myToolbar.setTitle(toolbarInfo);
+        }
         Log.i("Lifecycle", "PriceGrabber Resumed");
     }
 

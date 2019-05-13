@@ -20,4 +20,5 @@
     <string name="ocr_failure">No text captured</string>
     <string name="ocr_error">"Error reading text: %1$s"</string>
     <string name="btnAdd">Add</string>
+    <string name="btn_save_shopping">Save Shopping</string>
 </resources>

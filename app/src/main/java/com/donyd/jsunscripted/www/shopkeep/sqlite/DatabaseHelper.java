@@ -90,4 +90,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return dateFormat.format(date);
     }
 
+    // TODO: Implement logic for shoppingList capture
+    // 1. Take first item from the list
+    // 2. If item name already exists in product table,
+    //    then insert into purchases table with purchases.product_id = product.id
+    // 3. Else if item name doesn't exist in product table,
+    //    then insert item into product table
+    // 4. Insert item into purchases table with purchases.product_id = product.id
+
+
 }
