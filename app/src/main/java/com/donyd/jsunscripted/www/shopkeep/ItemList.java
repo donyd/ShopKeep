@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.donyd.jsunscripted.www.shopkeep.sqlite.DatabaseHelper;
 
@@ -87,7 +88,16 @@ public class ItemList extends AppCompatActivity {
                     shoppingAdded = mDatabaseHelper.addShoppingList(shoppingList);
                 } // eof if
 
-                if (shoppingAdded) {
+                if (shoppingAdded) { // reset list and values if successful
+                    shoppingList.clear();
+                    toolbarInfo = "0 Items | € 0";
+                    myToolbar.setTitle(toolbarInfo);
+                    setItemDataAdapter(shoppingList);
+                    setupRecyclerView();
+
+                    // Toast message to let user know transaction was successful
+                    // https://www.javatpoint.com/android-toast-example
+                    Toast.makeText(getApplicationContext(), "Shopping Added!", Toast.LENGTH_SHORT).show();
                     Log.i("DatabaseCHK", "Shopping add successful");
                 } else {
                     Log.i("DatabaseCHK", "Shopping add unsuccessful");

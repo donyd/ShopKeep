@@ -25,6 +25,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "ShopKeep.db";
 
     public ArrayList<Item> shoppingList = new ArrayList<>();
+    private Cursor productId;
+    private boolean cursorCheck = true;
 
     public DatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -91,7 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     productsContentValues.put(Products.COLUMN_PRICE, item.getFloatPrice());
 
                     // Purchases Table
-                    purchasesContentValues.put(Purchases.COLUMN_PRODUCT_ID, i);
+                    purchasesContentValues.put(Purchases.COLUMN_PRODUCT_ID, getProdIdByName(item.getName()));
                     purchasesContentValues.put(Purchases.COLUMN_PURCHASE_DATE, getDateTime());
                     purchasesContentValues.put(Purchases.COLUMN_ESTIMATED_DURATION, getDateTime());
                     purchasesContentValues.put(Purchases.COLUMN_ACTUAL_DURATION, getDateTime());
@@ -99,6 +101,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 } // else
             } // for
         } // while
+
+        // Close productId cursor resource
+        if (productId != null) {
+            productId.close();
+        }
 
         long productResult = db.insert(Products.TABLE_NAME, null, productsContentValues);
         long purchasesResult = db.insert(Purchases.TABLE_NAME, null, purchasesContentValues);
@@ -121,13 +128,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String queryString = "SELECT " + Products._ID + " FROM "
-                + Products.TABLE_NAME + " WHERE " + Products.COLUMN_NAME + " = " + name;
+                + Products.TABLE_NAME + " WHERE " + Products.COLUMN_NAME + " = " +  "\"" + name + "\"";
 
-        Cursor productId = db.rawQuery(queryString, null);
+        productId = db.rawQuery(queryString, null);
 
-        // Close cursor resource
-        productId.close();
-        return productId.getInt(0);
+        if ( productId != null && productId.moveToFirst()){
+            return productId.getInt(0);
+        } else {
+            return 0;
+        }
+
     }
 
 
