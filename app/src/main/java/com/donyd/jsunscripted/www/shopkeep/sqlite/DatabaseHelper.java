@@ -64,7 +64,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // code adapted from https://www.youtube.com/watch?v=aQAIMY-HzL8
     public boolean addShoppingList(ArrayList<Item> shoppingList){
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues =  new ContentValues();
+        ContentValues purchasesContentValues =  new ContentValues();
+        ContentValues productsContentValues = new ContentValues();
 
         // get current list of products if any
         ArrayList<Item> products = getExistingProducts();
@@ -78,31 +79,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Item item = (Item) listLooper.next();
 
             for (int i = 0; i < products.size(); i++){
-
                 if(products.get(i).equals(item)){ // if a product already exists update purchases table
-                    contentValues.put(Purchases.COLUMN_PRODUCT_ID, getProdIdByName(item.getName()));
-                    contentValues.put(Purchases.COLUMN_PURCHASE_DATE, getDateTime());
-                    contentValues.put(Purchases.COLUMN_ESTIMATED_DURATION, getDateTime());
-                    contentValues.put(Purchases.COLUMN_ACTUAL_DURATION, getDateTime());
+                    purchasesContentValues.put(Purchases.COLUMN_PRODUCT_ID, getProdIdByName(item.getName()));
+                    purchasesContentValues.put(Purchases.COLUMN_PURCHASE_DATE, getDateTime());
+                    purchasesContentValues.put(Purchases.COLUMN_ESTIMATED_DURATION, getDateTime());
+                    purchasesContentValues.put(Purchases.COLUMN_ACTUAL_DURATION, getDateTime());
 
                 } else { // update product table as well
                     // Product Table
-                    contentValues.put(Products.COLUMN_NAME, item.getName());
-                    contentValues.put(Products.COLUMN_PRICE, item.getFloatPrice());
+                    productsContentValues.put(Products.COLUMN_NAME, item.getName());
+                    productsContentValues.put(Products.COLUMN_PRICE, item.getFloatPrice());
 
                     // Purchases Table
-                    contentValues.put(Purchases.COLUMN_PRODUCT_ID, getProdIdByName(item.getName()));
-                    contentValues.put(Purchases.COLUMN_PURCHASE_DATE, getDateTime());
-                    contentValues.put(Purchases.COLUMN_ESTIMATED_DURATION, getDateTime());
-                    contentValues.put(Purchases.COLUMN_ACTUAL_DURATION, getDateTime());
+                    purchasesContentValues.put(Purchases.COLUMN_PRODUCT_ID, i);
+                    purchasesContentValues.put(Purchases.COLUMN_PURCHASE_DATE, getDateTime());
+                    purchasesContentValues.put(Purchases.COLUMN_ESTIMATED_DURATION, getDateTime());
+                    purchasesContentValues.put(Purchases.COLUMN_ACTUAL_DURATION, getDateTime());
 
                 } // else
             } // for
         } // while
 
-        long result = db.insert(Purchases.TABLE_NAME, null, contentValues);
+        long productResult = db.insert(Products.TABLE_NAME, null, productsContentValues);
+        long purchasesResult = db.insert(Purchases.TABLE_NAME, null, purchasesContentValues);
 
-        if (result == -1){
+        if ( (productResult == -1) && (purchasesResult == -1) ){
             return false;
         } else
         {
@@ -172,7 +173,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while(productSet.moveToNext()){
             // retrieve columns _ID and name from each row and add to item
             // adapted from https://developer.android.com/reference/android/database/Cursor
-            Item currItem = new Item(productSet.getInt(0), productSet.getString(2));
+            Item currItem = new Item(productSet.getInt(0), productSet.getString(1));
             // add item to
             shoppingList.add(currItem);
         }
