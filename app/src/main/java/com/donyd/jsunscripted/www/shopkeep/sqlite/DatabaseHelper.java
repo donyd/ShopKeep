@@ -110,6 +110,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /*
+    *   HELPER METHODS FOR:
+    *    addShoppingList method above
+     */
 
     // Query string to retrieve product _ID by name
     private int getProdIdByName(String name){
@@ -145,7 +149,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //    then insert item into product table
     // 4. Insert item into purchases table with purchases.product_id = product.id
 
-    // Helper method to retrieve all products table records
+    // Method to retrieve all products table records
     // code adapted from https://app.pluralsight.com/player?course=android-database-application-sqlite-building-your-first&author=simone-alessandria&name=android-database-application-sqlite-building-your-first-m3&clip=6&mode=live
     // also previously utilized here https://github.com/donyd/FitnessAppPrototype/blob/master/app/src/main/java/com/unscripted/www/fitnessappprototype/WorkoutActivity.java
     private ArrayList<Item> getExistingProducts(){
@@ -167,11 +171,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // populate items with values
         while(productSet.moveToNext()){
             // retrieve columns _ID and name from each row and add to item
-            // and https://developer.android.com/reference/android/database/Cursor
+            // adapted from https://developer.android.com/reference/android/database/Cursor
             Item currItem = new Item(productSet.getInt(0), productSet.getString(2));
             // add item to
             shoppingList.add(currItem);
-
         }
 
         // Close resources

@@ -11,6 +11,8 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.donyd.jsunscripted.www.shopkeep.sqlite.DatabaseHelper;
@@ -34,10 +36,11 @@ public class ItemList extends AppCompatActivity {
 //    public static ArrayList<Item> shoppingList = new ArrayList<Item>();
     private static final String TAG = "setItemDataAdapter";
 
-    // Global references to own UI elements
+    // Global reference variables
     EditText ETPrice, ETName;
     Toolbar myToolbar;
     MenuItem cartIcon;
+    Button btnSaveShop;
 
     // Decimal Formatting to two places
     DecimalFormat decimalFormat = new DecimalFormat("##.##");
@@ -48,6 +51,7 @@ public class ItemList extends AppCompatActivity {
 
     // Database helper
     DatabaseHelper mDatabaseHelper;
+    boolean shoppingAdded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,32 @@ public class ItemList extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         // hide cart icon
         invalidateOptionsMenu();
+
+        // Instantiate databasehelper
+        mDatabaseHelper = new DatabaseHelper(this);
+
+        // UI References
+        btnSaveShop = (Button) findViewById(R.id.btnSaveShop);
+
+        // Button saveShop onClick event handler
+        btnSaveShop.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                if (shoppingList != null){
+                    // Add shoppinglist items to database
+                    // Code adapted from https://www.youtube.com/watch?v=aQAIMY-HzL8
+                    shoppingAdded = mDatabaseHelper.addShoppingList(shoppingList);
+                } // eof if
+
+                if (shoppingAdded) {
+                    Log.i("DatabaseCHK", "Shopping add successful");
+                } else {
+                    Log.i("DatabaseCHK", "Shopping add unsuccessful");
+                }
+            } // eof onClick
+        });
 
     }
 
@@ -234,20 +264,6 @@ public class ItemList extends AppCompatActivity {
             }
         });
 
-    }
+    } // eof setupRecyclerView
 
-
-    // Add shoppinglist items to database
-    // code adapted from https://www.youtube.com/watch?v=aQAIMY-HzL8
-    public void AddData(ArrayList<Item> itemList){
-        boolean insertData = mDatabaseHelper.addShoppingList(itemList);
-
-        if (insertData){
-            Log.i("DatabaseCHK", "Shopping added successfully");
-        } else {
-            Log.i("DatabaseCHK", "Shopping add unsuccessful");
-        }
-    }
-
-
-}
+} // eof Class File
